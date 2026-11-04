@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Бабушке 🕊️</title>
+    <style>
+        :root {
+            --bg-color: #fbf8f1;
+            --card-bg: #ffffff;
+            --text-main: #4a3b32;
+            --text-muted: #8c7b70;
+            --accent-gold: #c9a96e;
+            --accent-soft: rgba(201, 169, 110, 0.15);
+            --serif: 'Georgia', 'Times New Roman', serif;
+            --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            font-family: var(--sans);
+            color: var(--text-main);
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Мягкий фон с плавным свечением */
+        .glow-bg {
+            position: fixed;
+            width: 80vw; height: 80vw;
+            max-width: 800px; max-height: 800px;
+            background: radial-gradient(circle, rgba(255, 235, 205, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation: breathe 10s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes breathe {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        /* Летающие искорки */
+        .sparkle {
+            position: fixed;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+        }
+
+        /* Карточка */
+        .card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 45px 35px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(74, 59, 50, 0.06),
+                        inset 0 0 0 1px rgba(201, 169, 110, 0.2);
+            animation: cardIn 1.2s ease-out both;
+        }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Декоративная веточка */
+        .ornament {
+            font-size: 32px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: sway 4s ease-in-out infinite;
+            transform-origin: bottom center;
+            color: var(--accent-gold);
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .divider {
+            width: 50px;
+            height: 1px;
+            background: var(--accent-gold);
+            margin: 0 auto 20px;
+            opacity: 0.5;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-family: var(--serif);
+            font-style: italic;
+        }
+
+        /* Кнопка */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-family: var(--sans);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            outline: none;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent-soft);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before, .btn:active::before {
+            transform: scaleX(1);
+        }
+
+        .btn:hover, .btn:active {
+            border-color: var(--accent-gold);
+            color: #a88143;
+        }
+
+        /* Письмо (скрытый контент) */
+        .letter {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.6s ease, 
+                        margin 0.6s ease;
+            text-align: left;
+            margin-top: 0;
+        }
+
+        .letter.open {
+            max-height: 600px;
+            opacity: 1;
+            margin-top: 30px;
+        }
+
+        .letter p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-family: var(--serif);
+        }
+
+        .signature {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            font-family: var(--serif);
+            font-style: italic;
+            text-align: right;
+            margin-top: 20px;
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 35px 20px; }
+            h1 { font-size: 1.7rem; }
+            .subtitle { font-size: 0.95rem; }
+            .letter p { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <main class="card">
+        <span class="ornament">🌿</span>
+        
+        <h1>Дорогая<br>бабушка</h1>
+        
+        <div class="divider"></div>
+        
+        <p class="subtitle">Желаю тебе крепкого здоровья, спокойствия и благополучия.</p>
+        
+        <button class="btn" id="openBtn">Прочитать поздравление</button>
+
+        <div class="letter" id="letter">
+            <p>Дорогая бабушка!</p>
+            <p>Поздравляю тебя с праздником. От всей души желаю тебе крепкого здоровья, бодрости духа и благополучия.</p>
+            <p>Пусть каждый день приносит тебе спокойствие и радость, а домашний уют согревает в любую погоду. Желаю тебе долгих лет жизни, внимания близких и хорошего самочувствия.</p>
+            <p>Береги себя.</p>
+            <span class="signature">С уважением и наилучшими пожеланиями</span>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Логика открытия письма
+            const btn = document.getElementById('openBtn');
+            const letter = document.getElementById('letter');
+
+            btn.addEventListener('click', () => {
+                const isOpen = letter.classList.toggle('open');
+                btn.textContent = isOpen ? 'Свернуть' : 'Прочитать поздравление';
+            });
+
+            // 2. Создание мягких летающих искорок
+            function createSparkle() {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                
+                const size = Math.random() * 4 + 2;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.bottom = '-10px';
+                
+                const duration = Math.random() * 6 + 6;
+                s.style.animationDuration = duration + 's';
+                
+                document.body.appendChild(s);
+
+                setTimeout(() => {
+                    s.remove();
+                }, duration * 1000);
+            }
+
+            for (let i = 0; i < 15; i++) {
+                setTimeout(createSparkle, Math.random() * 5000);
+            }
+            setInterval(createSparkle, 1200);
+        });
+    </script>
+</body>
+</html>
